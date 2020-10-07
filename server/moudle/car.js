@@ -4,12 +4,13 @@ mongoose.connect('mongodb://localhost:27017/0930', {
     useUnifiedTopology: true
 })
 const Schema = mongoose.Schema
-const goodsSchema = new Schema({
+const carSchema = new Schema({
+    uid: String,
+    pid: String,
+    num: String,
     title: String,
     imgurl: String,
-    price: String,
-    desc: String,
-    hot: String
+
 })
-const Goods = mongoose.model('Goods', goodsSchema, 'goods')
-module.exports = Goods
+const Car = mongoose.model('Car', carSchema, 'car')
+module.exports = Car

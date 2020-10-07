@@ -4,8 +4,8 @@ var bodyParser = require('body-parser')
 const User = require("./moudle/user")
 const Goods = require("./moudle/goods")
 const Goodskind = require("./moudle/goodskind")
-
-// parse application/json
+const Car = require("./moudle/car")
+    // parse application/json
 app.use(bodyParser.json())
 var multer = require("multer");
 var storage = multer.diskStorage({
@@ -103,7 +103,7 @@ app.get('/showdata/:id', function(req, res) {
     })
 })
 app.put('/uesruple/:id', function(req, res) {
-    console.log(req.params.id, req.body)
+    // console.log(req.params.id, req.body)
     User.findByIdAndUpdate(req.params.id, req.body).then(mon => {
         if (mon) {
             res.json({
@@ -120,39 +120,167 @@ app.post('/upload', upload.single('avatar'), function(req, res, next) {
         path: req.file.path
     })
 })
+app.post('/goodsdata', function(req, res) {
+    // console.log(req.body)
+    const data = req.body;
+    const goods = new Goods(data);
+    goods.save().then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据添加成功"
+            })
+        }
+    })
+})
+app.get('/goods/data/:id', function(req, res) {
+    const id = req.params.id;
+    Goods.findById(id).then(mon => {
+        // console.log(mon)
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据查询成功",
+                list: mon
+            })
+        }
+    })
+})
+app.put('/goods/ecitdata/:id', function(req, res) {
 
+    Goods.findByIdAndUpdate(req.params.id, req.body).then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据修改成功"
+            })
+        }
+    })
+})
+app.delete("/goods/:id", function(req, res) {
 
+    Goods.findByIdAndDelete(req.params.id).then(mon => {
+        if (mon) {
+            res.json({
+                msg: "数据删除成功"
+            })
+        }
+    })
+})
+app.get('/getgoodslist', function(req, res) {
+    Goods.find().then(mon => {
+        // console.log(mon);
+        if (mon) {
+            res.json({
+                code: 20000,
+                list: mon,
+                msg: '数据查询成功'
+            })
+        }
+    })
+})
 
+app.post('/carsave', function(req, res) {
+    const date = req.body;
+    // console.log(date);
+    const car = new Car(date);
+    car.save().then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据添加成功"
+            })
+        }
 
+    })
+})
+app.get('/carList', function(req, res) {
+    Car.find().then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据查询成功",
+                list: mon
+            })
+        }
+    })
+})
+app.get('/carshowdata/:id', function(req, res) {
+    console.log(req.params.id)
+    Car.findById(req.params.id).then(mon => {
+        console.log(mon)
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: '数据查询成功',
+                list: mon
+            })
+        }
+    })
+})
+app.put('/caruple/:id', function(req, res) {
+    // console.log(req.params.id, req.body)
+    Car.findByIdAndUpdate(req.params.id, req.body).then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: "数据修改成功"
+            })
+        }
+    })
+})
+app.delete('/carDele/:id', function(req, res) {
 
-
-
-app.post('/goodskind', function(req, res) {
-        const date = req.body;
-        console.log(date)
-        res.json({
-            code: 20000,
-            msg: "数据添加成功"
-        })
-        const goodskind = new Goodskind(date);
-        goodskind.save().then(mon => {
-            if (mon) {
+    Car.findByIdAndDelete(req.params.id).then(mon => {
+        if (mon) {
+            res.json({
+                code: 20000,
+                msg: '数据删除成功'
+            })
+        }
+    })
+})
+app.post('/loge', function(req, res) {
+        User.find(req.body).then(mon => {
+            if (mon.length > 0) {
                 res.json({
-                    code: 20000,
-                    msg: "数据添加成功"
+                    code: 2000,
+                    msg: '登录成功',
+                    list: mon
+                })
+            } else {
+                res.json({
+                    msg: '用户名或密码错误'
                 })
             }
-
         })
     })
-    // app.post('/city/data', function(req, res) {
-    //     const city = new City(req.body)
-    //     city.save().then(mon => {
-    //         if (mon) {
-    //             res.json({
-    //                 msg: "数据添加成功"
-    //             })
-    //         }
+    // app.post('/goodskind', function(req, res) {
+    //         const date = req.body;
+    //         console.log(date)
+    //         res.json({
+    //             code: 20000,
+    //             msg: "数据添加成功"
+    //         })
+    //         const goodskind = new Goodskind(date);
+    //         goodskind.save().then(mon => {
+    //             if (mon) {
+    //                 res.json({
+    //                     code: 20000,
+    //                     msg: "数据添加成功"
+    //                 })
+    //             }
+
+//         })
+//     })
+// app.post('/city/data', function(req, res) {
+//     const city = new City(req.body)
+//     city.save().then(mon => {
+//         if (mon) {
+//             res.json({
+//                 msg: "数据添加成功"
+//             })
+//         }
 
 //     })
 // })
